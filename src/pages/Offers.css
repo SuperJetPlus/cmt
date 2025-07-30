@@ -1,0 +1,45 @@
+@import '../components/ui/PromoSection.css';
+
+.offers-page {
+  padding: 3rem 0;
+  background: #ffffff;
+  min-height: 100vh;
+}
+
+body.dark {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+body.dark .offers-page {
+  background: #121212;
+}
+
+.offers-page .container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.offers-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #007bff;
+  text-align: center;
+}
+
+body.dark .offers-title {
+  color: #007bff;
+}
+
+.offers-subtitle {
+  text-align: center;
+  margin-bottom: -1rem;
+  color: #666;
+  font-size: 1.05rem;
+}
+
+body.dark .offers-subtitle {
+  color: #bbb;
+}

@@ -1,0 +1,198 @@
+.promo-section {
+  padding: 3rem 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  animation: fadeIn 1s ease-in;
+}
+
+body.dark .promo-section {
+  background: linear-gradient(135deg, #1e1e1e 0%, #2c3e50 100%);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.promo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  align-items: stretch;
+}
+
+.promo-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: cardPop 0.6s ease;
+}
+
+body.dark .promo-card {
+  background: #1e1e1e;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
+}
+
+@keyframes cardPop {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.promo-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+body.dark .promo-card:hover {
+  box-shadow: 0 12px 24px rgba(255, 255, 255, 0.1);
+}
+
+.promo-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.promo-icon {
+  font-size: 2.8rem;
+  color: #007bff;
+  margin-bottom: 0.5rem;
+}
+
+.promo-card h3 {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+body.dark .promo-card h3 {
+  color: #f0f0f0;
+}
+
+.promo-description {
+  color: #7f8c8d;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+body.dark .promo-description {
+  color: #ccc;
+}
+
+.promo-timer {
+  background: #fff4f4;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  margin-bottom: 1rem;
+  width: fit-content;
+  border: 1px solid #f5c6cb;
+}
+
+body.dark .promo-timer {
+  background: #4e1f1f;
+  border-color: #c0392b;
+}
+
+.time-label {
+  font-size: 0.85rem;
+  color: #e74c3c;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.time-value {
+  font-weight: bold;
+  color: #c0392b;
+  font-size: 1.3rem;
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 1px;
+}
+
+.promo-code-container {
+  margin-bottom: 1.5rem;
+}
+
+.promo-code-label {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  display: block;
+}
+
+body.dark .promo-code-label {
+  color: #ccc;
+}
+
+.promo-code {
+  display: inline-block;
+  background: #007bff;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-top: 0.3rem;
+  font-family: 'Courier New', Courier, monospace;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.promo-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 600;
+  width: 100%;
+  margin-top: auto;
+}
+
+.promo-button:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+.promo-card:nth-child(1) {
+  border-top: 4px solid #e74c3c;
+  animation: pulseUrgent 2s infinite;
+}
+
+@keyframes pulseUrgent {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.015); }
+}
+
+.promo-card:nth-child(1) .promo-icon {
+  color: #e74c3c;
+}
+
+.promo-card:nth-child(1) .promo-button {
+  background: #e74c3c;
+}
+
+.promo-card:nth-child(1) .promo-button:hover {
+  background: #c0392b;
+}
+
+@media (max-width: 768px) {
+  .promo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .promo-code {
+    font-size: 0.85rem;
+  }
+}

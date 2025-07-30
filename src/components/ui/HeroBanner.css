@@ -1,0 +1,73 @@
+.hero-banner {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+              url('../assets/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 720px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+body.dark .hero-banner {
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+              url('../assets/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 720px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 12px 30px;
+  background: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+
+.hero-cta::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: #007bff;
+  transition: 0.2s ease;
+}
+
+.hero-cta:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+}
+
+.hero-cta:active {
+  background: #0a3e77;
+  color: rgb(255, 255, 255);
+  transform: translateY(1px);
+}

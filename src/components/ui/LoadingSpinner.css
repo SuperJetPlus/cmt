@@ -1,0 +1,130 @@
+/* Contenedor principal */
+.loading-spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Versión full page */
+.loading-spinner-container.full-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 1000;
+}
+
+/* Spinner base */
+.spinner {
+  position: relative;
+  display: inline-block;
+  border-radius: 50%;
+  animation: rotate 1.5s linear infinite;
+}
+
+/* Tamaños */
+.spinner-small {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.spinner-medium {
+  width: 3rem;
+  height: 3rem;
+}
+
+.spinner-large {
+  width: 5rem;
+  height: 5rem;
+}
+
+/* Sectores del spinner */
+.spinner-sector {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 0.15em solid transparent;
+  mix-blend-mode: overlay;
+}
+
+.spinner-sector-1 {
+  border-top-color: currentColor;
+  animation: spinner-sector-1 1s ease-in-out infinite;
+}
+
+.spinner-sector-2 {
+  border-left-color: currentColor;
+  animation: spinner-sector-2 1.5s ease-in-out infinite;
+}
+
+.spinner-sector-3 {
+  border-right-color: currentColor;
+  animation: spinner-sector-3 2s ease-in-out infinite;
+}
+
+/* Colores */
+.spinner-primary {
+  color: #007bff;
+}
+
+.spinner-secondary {
+  color: #6c757d;
+}
+
+.spinner-accent {
+  color: #28a745;
+}
+
+.spinner-white {
+  color: #ffffff;
+}
+
+/* Texto */
+.spinner-text {
+  margin: 0;
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+.full-page .spinner-text {
+  font-size: 1.2rem;
+}
+
+/* Animaciones */
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner-sector-1 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner-sector-2 {
+  0% {
+    transform: rotate(120deg);
+  }
+  100% {
+    transform: rotate(480deg);
+  }
+}
+
+@keyframes spinner-sector-3 {
+  0% {
+    transform: rotate(240deg);
+  }
+  100% {
+    transform: rotate(600deg);
+  }
+}

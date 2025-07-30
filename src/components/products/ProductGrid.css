@@ -1,0 +1,117 @@
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.product-card {
+  position: relative;
+  background-color: #fffdfd;
+  background-image: radial-gradient(circle 160px at 50% 120%, #ffffff, #ffffff);
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0px 8px 20px -10px #bbbbbb;
+  letter-spacing: 0.5px;
+  border: 1px solid #bebebe;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+body.dark .product-card {
+  background-color: #1e1e1e;
+  background-image: none;
+  color: #f0f0f0;
+  border-color: #444;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+}
+
+.product-card.interactive::after {
+  content: "Ver Producto";
+  padding-top: 1.25em;
+  padding-left: 1.25em;
+  position: absolute;
+  left: 0;
+  bottom: -60px;
+  background: #007bff;
+  color: #fff;
+  height: 2.5em;
+  width: 90%;
+  transition: all 500ms;
+  font-weight: 600;
+  text-transform: uppercase;
+  opacity: 0;
+}
+
+.product-card.interactive:hover::after {
+  bottom: 0;
+  opacity: 1;
+}
+
+.product-card:active {
+  transform: scale(0.98);
+}
+
+.product-card.interactive:active::after {
+  content: "Viendo";
+  height: 3.125em;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 1rem;
+}
+
+.product-name {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+  color: #333;
+}
+
+body.dark .product-name {
+  color: #f0f0f0;
+}
+
+.product-description {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0.5rem 0;
+}
+
+body.dark .product-description {
+  color: #aaa;
+}
+
+.product-price {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.product-stock {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.product-stock.in-stock {
+  color: #28a745;
+}
+
+.product-stock.out-of-stock {
+  color: #dc3545;
+}
