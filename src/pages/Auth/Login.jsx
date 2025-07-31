@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import '../Contact.css';
 
 const Login = () => {
@@ -17,12 +17,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const userData = { 
-        name: 'Usuario Ejemplo',
-        email: email,
-        role: 'user' 
-      };
-      login(userData);
+      await login(email, password);
       setStatus('✅ Sesión iniciada correctamente');
       setTimeout(() => navigate('/'), 1200);
     } catch (err) {
@@ -57,6 +52,12 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Tu contraseña"
         />
+
+        <div style={{ textAlign: 'right', marginTop: '-0.5rem', marginBottom: '1rem' }}>
+          <Link to="/forgot-password" style={{ fontSize: '0.9rem' }}>
+            ¿Olvidaste tu contraseña?
+          </Link>
+        </div>
 
         <button type="submit" disabled={loading}>
           {loading ? 'Cargando...' : 'Iniciar Sesión'}

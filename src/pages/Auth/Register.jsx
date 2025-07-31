@@ -9,7 +9,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -23,13 +23,14 @@ const Register = () => {
     try {
       setLoading(true);
 
-      const userData = {
-        name: email.split('@')[0],
-        email: email,
-        role: 'user'
-      };
+      await register({
+        email,
+        password,
+        fullName: '',
+        dni: '',
+        phone: ''
+      });
 
-      login(userData);
       setStatus('✅ Registro exitoso');
       setTimeout(() => navigate('/'), 1200);
     } catch (err) {

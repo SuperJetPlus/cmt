@@ -1,4 +1,5 @@
-.contact-form {
+.contact-form,
+.auth-form {
   background-color: #f2f2f2;
   padding: 20px;
   border-radius: 10px;
@@ -6,6 +7,7 @@
   margin: 40px auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body.dark {
@@ -13,46 +15,56 @@ body.dark {
   color: #f0f0f0;
 }
 
-body.dark .contact-form {
+body.dark .contact-form,
+body.dark .auth-form {
   background-color: #1e1e1e;
   color: #ddd;
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.15);
 }
 
-.contact-form .heading {
+.contact-form .heading,
+.auth-form h2 {
   font-size: 2.5rem;
   color: #007bff;
   margin-bottom: 12px;
   font-weight: bold;
   display: block;
+  text-align: center;
 }
 
-.contact-form p {
+.contact-form p,
+.auth-form p {
   color: #444;
   margin-bottom: 20px;
+  text-align: center;
 }
 
-body.dark .contact-form p {
+body.dark .contact-form p,
+body.dark .auth-form p {
   color: #ccc;
 }
 
-.contact-form form {
+.contact-form form,
+.auth-form form {
   display: flex;
   flex-direction: column;
 }
 
-.contact-form form label {
+.contact-form form label,
+.auth-form form label {
   margin-bottom: 6px;
   color: black;
   font-weight: 500;
 }
 
-body.dark .contact-form form label {
+body.dark .contact-form form label,
+body.dark .auth-form form label {
   color: #ddd;
 }
 
 .contact-form form input,
-.contact-form textarea {
+.contact-form textarea,
+.auth-form form input {
   padding: 10px;
   border: none;
   border-radius: 5px;
@@ -63,21 +75,25 @@ body.dark .contact-form form label {
 }
 
 body.dark .contact-form form input,
-body.dark .contact-form textarea {
+body.dark .contact-form textarea,
+body.dark .auth-form form input {
   background-color: #2c2c2c;
   color: #ddd;
   border: 1px solid #444;
 }
 
 .contact-form form input:focus,
-.contact-form textarea:focus {
+.contact-form textarea:focus,
+.auth-form form input:focus {
   outline: none;
   box-shadow: 0 0 5px #007bff;
   transform: scale(1.03);
   transition: transform 0.3s ease-in-out;
 }
 
-.contact-form form button[type="submit"] {
+.contact-form form button[type="submit"],
+.auth-form form button[type="submit"],
+.auth-form form button {
   background-color: #007bff;
   color: #fff;
   border: none;
@@ -89,16 +105,44 @@ body.dark .contact-form textarea {
   transition: transform 0.3s ease-in-out;
 }
 
-.contact-form form button[type="submit"]:hover {
+.contact-form form button[type="submit"]:hover,
+.auth-form form button:hover {
   transform: scale(1.1);
 }
 
-.status-message {
+.status-message,
+.auth-success,
+.auth-error {
   margin-top: 10px;
   font-weight: 500;
-  color: #333;
+  text-align: center;
+}
+
+.auth-success {
+  color: green;
+}
+
+.auth-error {
+  color: red;
 }
 
 body.dark .status-message {
   color: #ccc;
+}
+
+.auth-form a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  display: block;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+body.dark .auth-form a {
+  color: #66b2ff;
+}
+
+.auth-form a:hover {
+  text-decoration: underline;
 }

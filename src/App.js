@@ -12,9 +12,11 @@ const AdminDashboard = lazy(() => import('./pages/Admin/Dashboard'));
 const ProductDetail = lazy(() => import('./pages/Product/ProductDetail'));
 const Login = lazy(() => import('./pages/Auth/Login'));
 const Register = lazy(() => import('./pages/Auth/Register'));
+const ForgotPassword = lazy(() => import('./pages/Auth/ForgotPassword'));
 const About = lazy(() => import('./pages/About'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Cart = lazy(() => import('./pages/Cart'));
+const Account = lazy(() => import('./pages/Account'));
 
 function App() {
   return (
@@ -31,9 +33,11 @@ function App() {
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/account" element={<Account />} />
             </Routes>
           </Suspense>
         </Router>
