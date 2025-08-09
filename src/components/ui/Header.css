@@ -1,3 +1,4 @@
+/* ===== Header General ===== */
 .ecommerce-header {
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -13,6 +14,7 @@ body.dark .ecommerce-header {
   box-shadow: 0 2px 10px rgba(255, 255, 255, 0.05);
 }
 
+/* ===== Container ===== */
 .container {
   width: 95%;
   max-width: 1200px;
@@ -22,6 +24,7 @@ body.dark .ecommerce-header {
   align-items: center;
 }
 
+/* ===== Top Bar ===== */
 .top-bar {
   background: #f8f9fa;
   padding: 8px 0;
@@ -34,7 +37,6 @@ body.dark .top-bar,
 body.dark .main-nav {
   background-color: #181818;
   border-color: #333;
-  transition: all 0.2s ease-in-out;
 }
 
 .top-bar .container {
@@ -50,6 +52,7 @@ body.dark .contact-info span {
   color: #ccc;
 }
 
+/* ===== User Actions ===== */
 .user-actions a,
 .user-actions button {
   margin-left: 15px;
@@ -77,6 +80,7 @@ body.dark .user-actions button {
   gap: 5px;
 }
 
+/* ===== Main Header ===== */
 .main-header {
   padding: 15px 0;
 }
@@ -100,6 +104,7 @@ body.dark .logo {
   color: #007bff;
 }
 
+/* ===== Header Icons ===== */
 .header-icons {
   display: flex;
   gap: 20px;
@@ -141,6 +146,7 @@ body.dark .icon-link {
   font-weight: bold;
 }
 
+/* ===== Tooltip ===== */
 .tooltip {
   position: absolute;
   top: 100%;
@@ -167,6 +173,7 @@ body.dark .tooltip {
   visibility: visible;
 }
 
+/* ===== Navigation ===== */
 .main-nav {
   border-top: 1px solid #eee;
 }
@@ -227,23 +234,7 @@ body.dark .main-nav a:hover {
   opacity: 1;
 }
 
-@media (max-width: 768px) {
-  .main-header .container {
-    flex-wrap: wrap;
-  }
-
-  .search-bar {
-    order: 3;
-    width: 100%;
-    margin: 15px 0 0;
-  }
-
-  .main-nav ul {
-    overflow-x: auto;
-    padding-bottom: 10px;
-  }
-}
-
+/* ===== Mobile Menu Button ===== */
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -285,6 +276,13 @@ body.dark .menu-toggle span {
   top: -6px;
 }
 
+/* ===== Responsive Styles ===== */
+@media (max-width: 992px) {
+  .header-icons {
+    gap: 15px;
+  }
+}
+
 @media (max-width: 768px) {
   .main-header .container {
     flex-wrap: wrap;
@@ -304,6 +302,7 @@ body.dark .menu-toggle span {
     opacity: 0;
     visibility: hidden;
     transition: max-height 0.4s ease, opacity 0.4s ease, visibility 0.4s ease;
+    background: inherit;
   }
 
   .main-nav.active {
@@ -326,14 +325,10 @@ body.dark .menu-toggle span {
   }
 
   .main-nav a {
-    display: block;
     padding: 16px 20px;
     width: 100%;
     font-size: 1rem;
     text-align: left;
-    text-transform: uppercase;
-    color: inherit;
-    background-color: transparent;
   }
 
   .logo {
@@ -344,12 +339,29 @@ body.dark .menu-toggle span {
     order: 3;
     justify-content: flex-end;
     width: 100%;
-    gap: 15px;
+    gap: 12px;
   }
 
   .search-bar {
     order: 4;
     width: 100%;
     margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-info span {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .user-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .header-icons {
+    gap: 10px;
   }
 }

@@ -64,7 +64,7 @@ const Header = () => {
           <div className="user-actions">
             {currentUser ? (
               <>
-                <span>¡Hola, {currentUser.name}!</span>
+                <span>¡Hola, {currentUser.fullName || currentUser.email}!</span>
                 {currentUser.role === 'admin' && (
                   <NavLink to="/admin" className="admin-link">
                     <FiPackage /> Panel Admin

@@ -28,12 +28,14 @@ const Register = () => {
         password,
         fullName: '',
         dni: '',
-        phone: ''
+        phone: '',
+        // El rol no se envía desde aquí, AuthContext lo asigna como 'user'
       });
 
       setStatus('✅ Registro exitoso');
       setTimeout(() => navigate('/'), 1200);
     } catch (err) {
+      console.error(err);
       setStatus('❌ Error al registrarse');
     }
 

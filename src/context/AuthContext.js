@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  sendPasswordResetEmail, // ← NUEVO
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 import {
   doc,
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
       fullName,
       dni,
       phone,
-      role: 'user',
+      role: 'user', // ← Forzamos siempre "user" al registrarse
       createdAt: new Date(),
     };
 
