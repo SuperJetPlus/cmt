@@ -1,94 +1,239 @@
-import React, { useState, useContext } from 'react';
-import { updateInventory } from '../../api/inventory';
-import InventoryContext from '../../context/InventoryContext';
-import ProductForm from '../../components/admin/ProductForm';
-import InventoryTable from '../../components/admin/InventoryTable';
-import Notification from '../../components/ui/Notification';
+import React, { useContext, useState } from "react";
+import InventoryContext from "../../context/InventoryContext";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import AddProductForm from "../../components/admin/AddProductForm";
+import "./InventoryManager.css";
 
 const InventoryManager = () => {
-  const { inventory, loading, updateStock } = useContext(InventoryContext);
-  const [notification, setNotification] = useState(null);
+  const { inventory, loading, deleteProduct, updateProduct } =
+    useContext(InventoryContext);
+
+  const [savingId, setSavingId] = useState(null);
+  const [editValues, setEditValues] = useState({});
+  const [showAddProduct, setShowAddProduct] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
 
-  // Filtrar productos basados en búsqueda
-  const filteredInventory = Object.entries(inventory).filter(([productId, variants]) => {
-    return productId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           Object.keys(variants).some(variantId => 
-             variantId.toLowerCase().includes(searchTerm.toLowerCase())
-           );
-  });
+  if (loading) return <LoadingSpinner />;
 
-  const handleUpdateStock = async (productId, variantId, newStock) => {
+  if (!loading && Object.keys(inventory).length === 0) {
+    return (
+      <div className="inventory-manager">
+        <h2>Gestor de Inventario</h2>
+        <button
+          onClick={() => setShowAddProduct(true)}
+          className="add-product-btn"
+        >
+          Agregar Nuevo Producto
+        </button>
+
+        {showAddProduct && (
+          <div
+            className="modal-overlay"
+            onClick={() => setShowAddProduct(false)}
+          >
+            <div
+              className="modal-content edit-modal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="close-btn"
+                onClick={() => setShowAddProduct(false)}
+                aria-label="Cerrar modal"
+              >
+                ×
+              </button>
+              <AddProductForm onProductAdded={() => setShowAddProduct(false)} />
+            </div>
+          </div>
+        )}
+
+        <p>No hay productos en el inventario. Usa el panel para agregar productos.</p>
+      </div>
+    );
+  }
+
+  // Manejar cambios en campos de edición
+  const handleChange = (productId, field, value) => {
+    setEditValues((prev) => ({
+      ...prev,
+      [productId]: { ...prev[productId], [field]: value },
+    }));
+  };
+
+  // Guardar producto editado
+  const handleSave = async (productId) => {
+    if (!editValues[productId]) return;
+
+    const updatedData = {
+      ...inventory[productId],
+      ...editValues[productId],
+    };
+
+    updatedData.price = parseFloat(updatedData.price) || 0;
+    updatedData.rating = parseFloat(updatedData.rating) || 0;
+    updatedData.stock = parseInt(updatedData.stock, 10) || 0;
+
     try {
-      await updateInventory({
-        productId,
-        variantId,
-        newStock,
-        action: 'SET_VALUE'
+      setSavingId(productId);
+      await updateProduct(productId, updatedData);
+
+      // Limpiar estado de edición
+      setEditValues((prev) => {
+        const newState = { ...prev };
+        delete newState[productId];
+        return newState;
       });
-      
-      updateStock(productId, variantId, newStock);
-      showNotification('Stock actualizado exitosamente', 'success');
+      setEditingProduct(null);
     } catch (error) {
-      showNotification('Error al actualizar stock', 'error');
-      console.error('Update error:', error);
+      console.error("Error actualizando producto:", error);
+      alert("Error al guardar los cambios");
+    } finally {
+      setSavingId(null);
     }
   };
 
-  const handleAddProduct = (newProduct) => {
-    // Lógica para añadir nuevo producto
-    console.log('Adding new product:', newProduct);
-    showNotification('Producto añadido', 'success');
-  };
+  // Eliminar producto
+  const handleDelete = async (productId) => {
+    if (!window.confirm("¿Seguro que quieres eliminar este producto?")) return;
 
-  const showNotification = (message, type) => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 3000);
+    try {
+      setSavingId(productId);
+      await deleteProduct(productId);
+    } catch (error) {
+      console.error("Error eliminando producto:", error);
+      alert("Error al eliminar el producto");
+    } finally {
+      setSavingId(null);
+    }
   };
-
-  if (loading) return <div className="loading">Cargando inventario...</div>;
 
   return (
     <div className="inventory-manager">
-      <h2>Gestión de Inventario</h2>
-      
-      <div className="inventory-controls">
-        <input
-          type="text"
-          placeholder="Buscar producto o variante..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-        
-        <button 
-          onClick={() => setEditingProduct({})}
-          className="add-button"
-        >
-          + Añadir Producto
-        </button>
-      </div>
+      <h2>Gestor de Inventario</h2>
 
-      {editingProduct && (
-        <ProductForm
-          product={editingProduct}
-          onSave={editingProduct.id ? handleUpdateStock : handleAddProduct}
-          onCancel={() => setEditingProduct(null)}
-        />
+      <button
+        onClick={() => setShowAddProduct(true)}
+        className="add-product-btn"
+      >
+        Agregar Nuevo Producto
+      </button>
+
+      {/* Modal: Agregar Producto */}
+      {showAddProduct && (
+        <div
+          className="modal-overlay"
+          onClick={() => setShowAddProduct(false)}
+        >
+          <div
+            className="modal-content edit-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="close-btn"
+              onClick={() => setShowAddProduct(false)}
+              aria-label="Cerrar modal"
+            >
+              ×
+            </button>
+            <AddProductForm onProductAdded={() => setShowAddProduct(false)} />
+          </div>
+        </div>
       )}
 
-      <InventoryTable
-        inventory={filteredInventory}
-        onEdit={(product) => setEditingProduct(product)}
-        onUpdateStock={handleUpdateStock}
-      />
+      {/* Grid de productos */}
+      <div className="product-grid">
+        {Object.entries(inventory).map(([productId, product]) => (
+          <div key={productId} className="product-card">
+            {product.image && (
+              <img
+                src={product.image}
+                alt={product.name}
+                className="product-image"
+              />
+            )}
+            <h3>{product.name}</h3>
+            <p className="price">S/. {product.price?.toFixed(2)}</p>
+            <p className="stock">Stock: {product.stock}</p>
+            <div className="card-actions">
+              <button onClick={() => setEditingProduct(productId)}>Editar</button>
+              <button
+                className="delete-btn"
+                onClick={() => handleDelete(productId)}
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
 
-      {notification && (
-        <Notification
-          message={notification.message}
-          type={notification.type}
-        />
+      {/* Modal: Editar Producto */}
+      {editingProduct && (
+        <div
+          className="modal-overlay"
+          onClick={() => setEditingProduct(null)}
+        >
+          <div
+            className="modal-content edit-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="close-btn"
+              onClick={() => setEditingProduct(null)}
+              aria-label="Cerrar modal"
+            >
+              ×
+            </button>
+            <h3>Editar Producto</h3>
+
+            {["name", "price", "rating", "category", "description", "stock"].map(
+              (field) => (
+                <div className="form-group" key={field}>
+                  <label htmlFor={`${field}-${editingProduct}`}>
+                    {field.charAt(0).toUpperCase() + field.slice(1)}:
+                  </label>
+                  {field === "description" ? (
+                    <textarea
+                      id={`${field}-${editingProduct}`}
+                      value={
+                        editValues[editingProduct]?.[field] ??
+                        inventory[editingProduct][field]
+                      }
+                      onChange={(e) =>
+                        handleChange(editingProduct, field, e.target.value)
+                      }
+                      className="form-textarea"
+                    />
+                  ) : (
+                    <input
+                      id={`${field}-${editingProduct}`}
+                      type={["price", "rating", "stock"].includes(field) ? "number" : "text"}
+                      value={
+                        editValues[editingProduct]?.[field] ??
+                        inventory[editingProduct][field]
+                      }
+                      onChange={(e) =>
+                        handleChange(editingProduct, field, e.target.value)
+                      }
+                      step={field === "price" ? "0.01" : "0.1"}
+                      min={["price", "rating", "stock"].includes(field) ? "0" : undefined}
+                      max={field === "rating" ? "5" : undefined}
+                      className="form-input"
+                    />
+                  )}
+                </div>
+              )
+            )}
+
+            <button
+              className="save-btn"
+              onClick={() => handleSave(editingProduct)}
+              disabled={savingId === editingProduct}
+            >
+              {savingId === editingProduct ? "Guardando..." : "Guardar"}
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

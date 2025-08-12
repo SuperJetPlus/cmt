@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import useInventory from './useInventory';
+import { useState, useEffect, useContext } from 'react';
+import { InventoryContext } from '../context/InventoryContext';
 
 const useCart = () => {
   const [cart, setCart] = useState(() => {
@@ -7,7 +7,7 @@ const useCart = () => {
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
-  const { inventory, updateStock } = useInventory();
+  const { inventory, updateStock } = useContext(InventoryContext);
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -58,7 +58,9 @@ const useCart = () => {
 
   const finalizePurchase = () => {
     cart.forEach((item) => {
-      updateStock(item.id, item.quantity);
+      const productInInventory = inventory.find(p => p.id === item.id);
+      const newStock = productInInventory ? productInInventory.stock - item.quantity : 0;
+      updateStock(item.id, newStock);
     });
     clearCart();
     alert('¡Compra realizada con éxito!');

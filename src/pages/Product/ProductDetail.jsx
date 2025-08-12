@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useCart from '../../hooks/useCart';
-import useInventory from '../../hooks/useInventory';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase/firebase';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { inventory } = useInventory();
-  const product = inventory.find((p) => p.id === id);
+
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [showImageFullscreen, setShowImageFullscreen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
   useEffect(() => {
     setShowImageFullscreen(false);
@@ -25,6 +28,51 @@ const ProductDetail = () => {
     if (showImageFullscreen) document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [showImageFullscreen]);
+
+  useEffect(() => {
+    const fetchProductAndRelated = async () => {
+      setLoading(true);
+      try {
+        // Cambiado a 'inventory' en lugar de 'products'
+        const docRef = doc(db, 'inventory', id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const prodData = { id: docSnap.id, ...docSnap.data() };
+          setProduct(prodData);
+
+          // Obtener productos relacionados en 'inventory'
+          const relatedQuery = query(
+            collection(db, 'inventory'),
+            where('category', '==', prodData.category)
+          );
+          const querySnapshot = await getDocs(relatedQuery);
+          const related = [];
+          querySnapshot.forEach((doc) => {
+            if (doc.id !== id) {
+              related.push({ id: doc.id, ...doc.data() });
+            }
+          });
+          setRelatedProducts(related.slice(0, 5));
+        } else {
+          setProduct(null);
+          setRelatedProducts([]);
+        }
+      } catch (error) {
+        console.error('Error al obtener producto:', error);
+        setProduct(null);
+        setRelatedProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductAndRelated();
+  }, [id]);
+
+  if (loading) {
+    return <div className="product-detail loading">Cargando producto...</div>;
+  }
 
   if (!product) {
     return (
@@ -46,16 +94,14 @@ const ProductDetail = () => {
     return (
       <div className="product-rating">
         {[...Array(5)].map((_, i) => (
-          <span key={i} className={i < rounded ? 'star filled' : 'star'}>★</span>
+          <span key={i} className={i < rounded ? 'star filled' : 'star'}>
+            ★
+          </span>
         ))}
         <span className="rating-value">({product.rating.toFixed(1)})</span>
       </div>
     );
   };
-
-  const relatedProducts = inventory
-    .filter((p) => p.category === product.category && p.id !== product.id)
-    .slice(0, 5);
 
   return (
     <div className="product-detail">
@@ -86,18 +132,15 @@ const ProductDetail = () => {
       </button>
 
       {showConfirmation && (
-        <div className="add-confirmation">
-          Producto agregado al carrito ✅
-        </div>
+        <div className="add-confirmation">Producto agregado al carrito ✅</div>
       )}
 
       {showImageFullscreen && (
-        <div className="fullscreen-overlay" onClick={() => setShowImageFullscreen(false)}>
-          <img
-            src={product.image}
-            alt={product.name}
-            className="fullscreen-image"
-          />
+        <div
+          className="fullscreen-overlay"
+          onClick={() => setShowImageFullscreen(false)}
+        >
+          <img src={product.image} alt={product.name} className="fullscreen-image" />
         </div>
       )}
 

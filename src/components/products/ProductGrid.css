@@ -88,10 +88,14 @@ body.dark .product-name {
 }
 
 .product-description {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0.5rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }
+
 
 body.dark .product-description {
   color: #aaa;

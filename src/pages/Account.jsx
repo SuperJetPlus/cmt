@@ -14,6 +14,7 @@ const Account = () => {
   const [phone, setPhone] = useState('');
   const [status, setStatus] = useState('');
   const [loadingSave, setLoadingSave] = useState(false);
+  const roleNames = { user: 'Usuario', admin: 'Administrador', };
 
   useEffect(() => {
     if (!currentUser) {
@@ -121,7 +122,7 @@ const Account = () => {
               <label>Rol</label>
               <input
                 type="text"
-                value={currentUser.role || 'user'}
+                value={roleNames[currentUser.role] || 'Usuario'}
                 disabled
               />
             </div>

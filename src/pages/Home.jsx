@@ -9,7 +9,6 @@ import './Home.css';
 const Home = () => {
   return (
     <div className="home-page">
-      {/* Sección Hero */}
       <HeroBanner 
         title="Bienvenido a Textil CMT"
         subtitle="CMT del Sur S.A.C. ofrece soluciones textiles que combinan estilo, durabilidad y tecnología, posicionándose como una empresa líder en confección dentro del mercado nacional e internacional."
@@ -17,7 +16,6 @@ const Home = () => {
         ctaLink="/products"
       />
       
-      {/* Productos Destacados */}
       <section className="featured-section">
         <div className="container">
           <h2>Productos Destacados</h2>
@@ -30,16 +28,13 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Promociones */}
       <PromoSection 
         title="Ofertas Especiales"
         description="Aprovecha nuestras promociones por tiempo limitado"
       />
 
-      {/* Testimonios */}
       <Testimonials />
 
-      {/* CTA Final */}
       <section className="final-cta">
         <div className="container">
           <h3>¿Listo para descubrir más?</h3>

@@ -1,53 +1,59 @@
 import { useState, useEffect } from 'react';
-import initialProducts from '../data/mockProducts';
-
-const INVENTORY_KEY = 'inventory';
-const INVENTORY_VERSION_KEY = 'inventory_version';
-
-const generateVersion = (products) => {
-  // Crea una versión simple basada en los IDs concatenados
-  return products.map((p) => p.id).sort().join(',');
-};
+import { collection, doc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase/firebase';
 
 const useInventory = () => {
-  const initialVersion = generateVersion(initialProducts);
-  const savedVersion = localStorage.getItem(INVENTORY_VERSION_KEY);
-  const savedInventory = localStorage.getItem(INVENTORY_KEY);
-
-  const shouldResetInventory = !savedVersion || savedVersion !== initialVersion;
-
-  const [inventory, setInventory] = useState(() => {
-    if (shouldResetInventory) {
-      localStorage.setItem(INVENTORY_VERSION_KEY, initialVersion);
-      localStorage.setItem(INVENTORY_KEY, JSON.stringify(initialProducts));
-      return initialProducts;
-    }
-    return savedInventory ? JSON.parse(savedInventory) : initialProducts;
-  });
+  const [inventory, setInventory] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    localStorage.setItem(INVENTORY_KEY, JSON.stringify(inventory));
-  }, [inventory]);
-
-  const updateStock = (productId, quantitySold) => {
-    setInventory((prev) =>
-      prev.map((item) =>
-        item.id === productId
-          ? { ...item, stock: item.stock - quantitySold }
-          : item
-      )
+    const unsubscribe = onSnapshot(
+      collection(db, 'products'),
+      (snapshot) => {
+        const products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setInventory(products);
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error al obtener productos de Firestore:', error);
+        setLoading(false);
+      }
     );
+
+    return () => unsubscribe();
+  }, []);
+
+  const updateStock = async (productId, quantitySold) => {
+    try {
+      setInventory((prev) =>
+        prev.map((item) =>
+          item.id === productId
+            ? { ...item, stock: item.stock - quantitySold }
+            : item
+        )
+      );
+
+      const productRef = doc(db, 'products', productId);
+      await updateDoc(productRef, {
+        stock: (inventory.find(p => p.id === productId)?.stock || 0) - quantitySold,
+      });
+    } catch (error) {
+      console.error('Error actualizando stock en Firestore:', error);
+      // Opcional: revertir estado local o mostrar error al usuario
+    }
   };
 
+  // Resetea inventario a un estado "inicial" si quieres: aquí puedes definirlo
+  // Por simplicidad, dejamos vacío o haces un reset local o mediante función aparte.
   const resetInventory = () => {
-    const version = generateVersion(initialProducts);
-    localStorage.setItem(INVENTORY_KEY, JSON.stringify(initialProducts));
-    localStorage.setItem(INVENTORY_VERSION_KEY, version);
-    setInventory(initialProducts);
+    // Opcional: implementa reset en Firestore si tienes un estado inicial definido
+    // Por ejemplo, reescribir la colección con productos iniciales.
+    console.warn('resetInventory no está implementado para Firestore');
   };
 
   return {
     inventory,
+    loading,
     updateStock,
     resetInventory,
   };

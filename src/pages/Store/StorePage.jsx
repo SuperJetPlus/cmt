@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiFilter, FiX } from 'react-icons/fi';
 import ProductGrid from '../../components/products/ProductGrid';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
-import useInventory from '../../hooks/useInventory';
+import InventoryContext from '../../context/InventoryContext';
 import './StorePage.css';
 
 const StorePage = () => {
+  const { inventory, loading } = useContext(InventoryContext);
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
@@ -16,14 +17,20 @@ const StorePage = () => {
   });
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const navigate = useNavigate();
-  const { inventory, loading } = useInventory();
 
   useEffect(() => {
-    setProducts(inventory);
-  }, [inventory]);
+    if (!loading) {
+      const productsArray = Object.entries(inventory).map(([id, product]) => ({
+        id,
+        ...product
+      }));
+      setProducts(productsArray);
+    }
+  }, [inventory, loading]);
 
   const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.description.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesCategory = !filters.category || product.category === filters.category;
@@ -56,6 +63,9 @@ const StorePage = () => {
     return <LoadingSpinner fullPage={true} text="Cargando productos..." />;
   }
 
+  // Obtener categorías únicas desde los productos
+  const availableCategories = [...new Set(products.map(p => p.category))];
+
   return (
     <div className="store-page">
       <div className="store-header">
@@ -63,13 +73,12 @@ const StorePage = () => {
       </div>
 
       <div className="store-content">
-
-
         <div className="filters-desktop">
           <FilterSidebar
             filters={filters}
             setFilters={setFilters}
             clearFilters={clearFilters}
+            categories={availableCategories}
           />
         </div>
 
@@ -124,7 +133,6 @@ const StorePage = () => {
         </main>
       </div>
 
-      { }
       {showMobileFilters && (
         <div className="mobile-filters-overlay">
           <div className="mobile-filters-content">
@@ -141,6 +149,7 @@ const StorePage = () => {
               filters={filters}
               setFilters={setFilters}
               clearFilters={clearFilters}
+              categories={availableCategories}
             />
             <button
               className="apply-filters"
@@ -155,9 +164,7 @@ const StorePage = () => {
   );
 };
 
-const FilterSidebar = ({ filters, setFilters, clearFilters }) => {
-  const categories = ['Hogar', 'Ropa', 'Deportes'];
-
+const FilterSidebar = ({ filters, setFilters, clearFilters, categories }) => {
   return (
     <div className="filter-sidebar">
       <h3>Filtrar por</h3>
@@ -185,7 +192,7 @@ const FilterSidebar = ({ filters, setFilters, clearFilters }) => {
               checked={filters.priceRange === 'under50'}
               onChange={() => setFilters({ ...filters, priceRange: 'under50' })}
             />
-            Menos de $50
+            Menos de S/. 50
           </label>
           <label>
             <input
@@ -194,7 +201,7 @@ const FilterSidebar = ({ filters, setFilters, clearFilters }) => {
               checked={filters.priceRange === '50to100'}
               onChange={() => setFilters({ ...filters, priceRange: '50to100' })}
             />
-            $50 - $100
+            S/. 50 - S/. 100
           </label>
           <label>
             <input
@@ -203,7 +210,7 @@ const FilterSidebar = ({ filters, setFilters, clearFilters }) => {
               checked={filters.priceRange === 'over100'}
               onChange={() => setFilters({ ...filters, priceRange: 'over100' })}
             />
-            Más de $100
+            Más de S/. 100
           </label>
         </div>
       </div>
