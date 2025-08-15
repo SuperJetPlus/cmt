@@ -1,4 +1,3 @@
-/* === HERO BANNER === */
 .hero-banner {
   position: relative;
   height: 720px;
@@ -22,7 +21,6 @@
   z-index: -1;
 }
 
-/* Capa de superposición para mejorar contraste */
 .hero-banner::after {
   content: "";
   position: absolute;
@@ -35,18 +33,15 @@
   transition: background 0.4s ease;
 }
 
-/* === MODO OSCURO === */
 body.dark .hero-banner::after {
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.85));
 }
 
-/* === CONTENIDO === */
 .hero-content {
   max-width: 800px;
   padding: 0 20px;
   color: white;
   z-index: 1;
-  /* Sombra ligera para mejorar legibilidad sobre fondos complejos */
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
@@ -62,7 +57,6 @@ body.dark .hero-banner::after {
   line-height: 1.5;
 }
 
-/* === BOTÓN CTA === */
 .hero-cta {
   display: inline-block;
   padding: 14px 32px;
@@ -78,7 +72,6 @@ body.dark .hero-banner::after {
   z-index: 1;
 }
 
-/* Efecto de línea inferior corregido */
 .hero-cta::before {
   content: "";
   position: absolute;
@@ -106,7 +99,6 @@ body.dark .hero-banner::after {
   background: #0a3e77;
 }
 
-/* === RESPONSIVE === */
 @media (max-width: 768px) {
   .hero-banner {
     height: 600px;
